@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Product Page</title>
+    <style>
+        #container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 15px;
+        }
+
+        .item {
+            border: 1px solid rgb(34, 33, 33);
+            color: rgb(54, 54, 54);
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            width: 230px;
+            text-align: center;
+        }
+
+        .item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        input {
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid lightgrey;
+            padding: 5px;
+        }
+
+        button {
+            font-size: 13px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+        }
+        .sec1 {
+            margin: 9px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sec1">
+    <input name="input1" type="text" id="input1" placeholder="Enter Product ID">
+    <button id="btn1" style="width:150px; height:30px;">Show Product</button>
+</div>
+
+    <div id="container"></div>
+
+    <script>
+        var container = document.getElementById("container");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", 'https://fakestoreapi.com/products/', true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                var products = JSON.parse(response);
+
+                for (var prod of products) {
+                    var title = prod.title;
+                    var price = prod.price;
+                    var img = prod.image;
+
+                    var itemDiv = document.createElement('div');
+                    itemDiv.className = "item";
+
+                    itemDiv.innerHTML = `
+                        <img src="${img}" alt="Product Image">
+                        <h3>${title}</h3>
+                        <p>Price: $${price}</p>
+                    `;
+
+                    container.appendChild(itemDiv);
+                }
+            }
+        };
+
+        // زرار التنقل للصفحة التانية مع id
+        var button = document.getElementById("btn1");
+        button.onclick = function () {
+            var input = document.getElementById("input1");
+            var id = input.value;
+            if (id) {
+                window.location.href = `indexx.html?id=${id}`;
+            } else {
+                alert("Please enter a product ID");
+            }
+        };
+    </script>
+
+</body>
+</html>
